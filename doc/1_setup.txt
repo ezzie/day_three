@@ -8,7 +8,7 @@ Setup
 7. command - git add .
 8. command - git commit -m"Initial Commit"
 9. Create new project in github with same name
-10. command - git remote add origin git@github.com:ezzie/training_app.git
+10. command - git remote add origin git@github.com:ezzie/day_three.git
 11. command - git push -u origin master
 
 debugging
