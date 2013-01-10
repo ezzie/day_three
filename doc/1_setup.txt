@@ -1,0 +1,14 @@
+Setup
+1. Create new project day_three from Aptana
+2. From outside Aptana replace .gitignore
+3. Change Readme and copy Gemfile
+4. Uncomment - gem 'debugger'
+5. command - bundle install
+6. command - git init
+7. command - git add .
+8. command - git commit -m"Initial Commit"
+9. Create new project in github with same name
+10. command - git remote add origin git@github.com:ezzie/training_app.git
+11. command - git push -u origin master
+
+debugging
