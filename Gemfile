@@ -59,3 +59,7 @@ end
 
 # To use debugger
 gem 'debugger'
+gem 'debugger-ruby_core_source', git: 'git://github.com/eiel/debugger-ruby_core_source.git'
+gem 'debugger-linecache', '1.1.2'
+# gem 'ruby-debug-base'
+# gem 'ruby-debug-ide'

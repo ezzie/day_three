@@ -11,4 +11,73 @@ Setup
 10. command - git remote add origin git@github.com:ezzie/day_three.git
 11. command - git push -u origin master
 
-debugging
+Scaffold Person Class
+1. rails generate scaffold Person name:string secret:string country:string email:string description:text can_send_email:boolean graduation_year:integer body_temperature:float price:decimal birthday:date favorite_time:time
+2. Review migration file for different data type and _form.html.erb
+3. rake db:migrate
+4. rails s - http://localhost:3000/people
+	a. create three records
+	b. Review .json
+
+XML format
+1. change PeopleController#index and add line - format.xml { render xml: @people.to_xml }
+def index
+    @people = Person.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @people }
+      format.xml { render xml: @people.to_xml }
+    end
+  end
+2. http://localhost:3000/people.xml
+
+Adding Picture
+1. Add :photo in person model as attribute accessor
+2. rails generate migration add_photo_extension_to_person
+class AddPhotoExtensionToPerson < ActiveRecord::Migration
+  def change
+    add_column :people, :extension, :string
+  end
+end
+3. rake db:migrate
+4. Change _form.html.erb 
+	a. <%= form_for(@person, :html => { :multipart => true }) do |f| %>
+	b.
+<div class="field">
+<%= f.label :photo %><br />
+<%= f.file_field :photo %>
+</div>
+5. Create new folder photo_store in public
+6. Copy following code in persom model file
+
+  after_save :store_photo
+  PHOTO_STORE = File.join Rails.root, 'public', 'photo_store'
+  def photo=(file_data)
+    unless file_data.blank?
+      @file_data = file_data
+      self.extension = file_data.original_filename.split('.').last.downcase
+    end
+  end
+  def has_photo?
+    File.exists? photo_filename
+  end
+  def photo_path
+    "/photo_store/#{id}.#{extension}"
+  end
+  def photo_filename
+    File.join PHOTO_STORE, "#{id}.#{extension}"
+  end
+  
+  private
+  
+  def store_photo
+    if @file_data
+      FileUtils.mkdir_p PHOTO_STORE
+      File.open(photo_filename, 'wb') do |f|
+        f.write(@file_data.read)
+      end
+      @file_data = nil
+    end
+  end
+7. rails s
