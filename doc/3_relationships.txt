@@ -1,0 +1,73 @@
+1. Slide 37 - has_one
+	a. rails generate scaffold supplier name:string
+	b. rails generate scaffold account account_number:string supplier_id:integer
+class Supplier < ActiveRecord::Base
+  has_one :account
+end
+2. Slide 38, 39 - has_many and belong_to
+	a. rails generate scaffold customer name:string
+	b. rails generate scaffold order name:string customer_id:integer
+	c. change classes as below
+class Customer < ActiveRecord::Base
+  has_many :orders #, :dependent => :destroy and customer.destroy
+end
+class Order < ActiveRecord::Base
+  belongs_to :customer
+end
+
+Rails Console
+	a. rake db:migrate
+	b. rails console --sandbox
+	c. rajan = Customer.create(name: "rajan")
+	d. Customer.create(name: "punchouty")
+	e. order = Order.create(name: "order1")
+	f. order.customer.nil?
+	g. customer = order.create_customer(name: "rajan punchouty")
+	h. customer.orders.empty?
+	i. customer.orders.size
+	j. customer.orders.create(name: "order2")
+	k. create!
+3. Slide 40 - has_many :through
+class Physician < ActiveRecord::Base
+  has_many :appointments
+  has_many :patients, :through => :appointments
+end
+ 
+class Appointment < ActiveRecord::Base
+  belongs_to :physician
+  belongs_to :patient
+end
+ 
+class Patient < ActiveRecord::Base
+  has_many :appointments
+  has_many :physicians, :through => :appointments
+end
+
+4. http://guides.rubyonrails.org/active_record_querying.html
+
+1. rails generate scaffold student given_name:string middle_name:string family_name:string date_of_birth:date grade_point_average:decimal start_date:date
+2. rails generate scaffold award name:string year:integer student_id:integer
+
+
+
+
+has_many :through
+class Physician < ActiveRecord::Base
+  has_many :appointments
+  has_many :patients, :through => :appointments
+end
+ 
+class Appointment < ActiveRecord::Base
+  belongs_to :physician
+  belongs_to :patient
+end
+ 
+class Patient < ActiveRecord::Base
+  has_many :appointments
+  has_many :physicians, :through => :appointments
+end
+
+session
+ajax
+relationship
+querying

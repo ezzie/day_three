@@ -1,4 +1,13 @@
 DayThree::Application.routes.draw do
+  resources :posts
+
+
+  resources :awards
+
+
+  resources :students
+
+
   resources :people
 
 

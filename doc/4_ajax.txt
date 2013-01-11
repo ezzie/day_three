@@ -1,0 +1,39 @@
+1. rails generate scaffold Post name:string title:string content:text
+2. rake db:migrate
+3. <%= form_for(@post, :remote => true) do |f| %> 
+4. look at the html generated
+5. Changes in controller
+  def create
+    @post = Post.new(params[:post])
+
+    respond_to do |format|
+      if @post.save
+        format.html { redirect_to @post, notice: 'Post was successfully created.' }
+        format.json { render json: @post, status: :created, location: @post }
+        format.js
+      else
+        format.html { render action: "new" }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.js
+      end
+    end
+  end
+6. Create create.js.erb
+$('body').html("<h1><%= @post.title %></h1>").append("<%= @post.content %>");  
+7. Update index.html.erb
+<td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }, :remote=>true, :class=>'delete_post' %></td>
+8. Edit post.js.coffee
+$('.delete_post').bind('ajax:success', function() {  
+    $(this).closest('tr').fadeOut();  
+});
+8. Update controller
+def destroy
+    @post = Post.find(params[:id])
+    @post.destroy
+
+    respond_to do |format|
+      format.html { redirect_to posts_url }
+      format.json { head :no_content }
+      format.js   { render :nothing => true }
+    end
+  end
