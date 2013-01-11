@@ -1,0 +1,53 @@
+1. rails generate mailer UserMailer
+class UserMailer < ActionMailer::Base
+  default from: "rajan@ezzie.in"
+  
+  def welcome_email(person)
+    @person = person
+    @url  = "http://example.com/login"
+    mail(:to => person.email, :subject => "Welcome to My Awesome Site")
+  end
+end
+2. Create welcome_email.html.erb in views/user_mailer
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1>Welcome to Rails Training, <%= @person.name %></h1>
+    <p>
+      You have successfully signed up to Rails Training,
+      your username is: <%= @person.email %>.<br/>
+    </p>
+    <p>
+      To login to the site, just follow this link: <%= @url %>.
+    </p>
+    <p>Thanks for joining and have a great day!</p>
+  </body>
+</html>
+3. Update create action
+def create
+    @person = Person.new(params[:person])
+
+    respond_to do |format|
+      if @person.save
+        UserMailer.welcome_email(@person).deliver
+        format.html { redirect_to @person, notice: 'Person was successfully created.' }
+        format.json { render json: @person, status: :created, location: @person }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @person.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+4. Change setting in development.erb
+config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address              => "smtp.gmail.com",
+    :port                 => 587,
+    :domain               => 'ezzie.in',
+    :user_name            => 'ezzieinfosystems',
+    :password             => 'punchouty',
+    :authentication       => 'plain',
+    :enable_starttls_auto => true  }
